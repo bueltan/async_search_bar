@@ -127,6 +127,9 @@ class SearchBar<T> extends StatefulWidget {
   /// Future returning searched items
   final Future<List<T>> Function(String text) onSearch;
 
+  /// default false.
+  final bool autoFocus;
+
   /// List of items showed by default
   final List<T> suggestions;
 
@@ -210,6 +213,7 @@ class SearchBar<T> extends StatefulWidget {
 
   const SearchBar({
     super.key,
+    this.autoFocus = false,
     required this.onSearch,
     required this.onItemFound,
     this.searchBarController,
@@ -389,6 +393,7 @@ class SearchBarState<T> extends State<SearchBar<T>>
                           primaryColor: widget.iconActiveColor,
                         ),
                         child: TextField(
+                          autofocus: widget.autoFocus,
                           controller: _searchQueryController,
                           onChanged: _onTextChanged,
                           style: widget.textStyle,
