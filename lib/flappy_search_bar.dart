@@ -15,7 +15,10 @@ mixin ControllerListener<T> on State<SearchBar<T>> {
 
   void onError(Error error) {}
 
-  void onSummit(String value) {}
+  void onSummit() {}
+
+  void onTap() {}
+
 }
 
 class SearchBarController<T> {
@@ -128,7 +131,10 @@ class SearchBarController<T> {
 class SearchBar<T> extends StatefulWidget {
   /// Future returning searched items
   final Future<List<T>> Function(String text) onSearch;
+  final void Function()? onSummit;
+  final void Function()? onTap;
 
+  final TextEditingController? textEditingController;
   /// default false.
   final bool autoFocus;
 
@@ -233,6 +239,9 @@ class SearchBar<T> extends StatefulWidget {
     this.textStyle = const TextStyle(color: Colors.black),
     this.cancellationWidget = const Text("Cancel"),
     this.onCancelled,
+    this.onSummit,
+    this.onTap,
+    this.textEditingController,
     this.suggestions = const [],
     this.buildSuggestion,
     this.searchBarStyle = const SearchBarStyle(),
@@ -254,7 +263,8 @@ class SearchBarState<T> extends State<SearchBar<T>>
     with TickerProviderStateMixin, ControllerListener<T> {
   bool _loading = false;
   Widget? _error;
-  final _searchQueryController = TextEditingController();
+  late final _searchQueryController ;
+
   Timer? _debounce;
   bool _animate = false;
   List<T> _list = [];
@@ -263,6 +273,11 @@ class SearchBarState<T> extends State<SearchBar<T>>
   @override
   void initState() {
     super.initState();
+    if (widget.textEditingController != null) {
+      _searchQueryController = widget.textEditingController!;
+    } else {
+      _searchQueryController = TextEditingController();
+    }
     searchBarController ??= SearchBarController<T>();
     searchBarController?.setListener(this);
     searchBarController?.setTextController(
@@ -286,10 +301,17 @@ class SearchBarState<T> extends State<SearchBar<T>>
     });
   }
 
-   @override
-  void onSummit(String value) {
+  @override
+  void onSummit() {
+    print("on summit");
+    widget.onSummit!();
   }
-
+  
+  @override
+  void onTap() {
+    print("on tap");
+    widget.onTap!();
+  }
   @override
   void onClear() {
     _cancel();
@@ -399,13 +421,15 @@ class SearchBarState<T> extends State<SearchBar<T>>
                           primaryColor: widget.iconActiveColor,
                         ),
                         child: TextField(
+                          onTap: onTap,
                           textInputAction: TextInputAction.search,
-                          onSubmitted: onSummit,
+                          onEditingComplete: onSummit,
                           autofocus: widget.autoFocus,
                           controller: _searchQueryController,
                           onChanged: _onTextChanged,
                           style: widget.textStyle,
                           cursorColor: widget.searchBarStyle.cursorColor,
+                          
                           decoration: InputDecoration(
                             icon: widget.icon,
                             border: InputBorder.none,
