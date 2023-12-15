@@ -14,6 +14,8 @@ mixin ControllerListener<T> on State<SearchBar<T>> {
   void onClear() {}
 
   void onError(Error error) {}
+
+  void onSummit(String value) {}
 }
 
 class SearchBarController<T> {
@@ -284,6 +286,10 @@ class SearchBarState<T> extends State<SearchBar<T>>
     });
   }
 
+   @override
+  void onSummit(String value) {
+  }
+
   @override
   void onClear() {
     _cancel();
@@ -394,6 +400,7 @@ class SearchBarState<T> extends State<SearchBar<T>>
                         ),
                         child: TextField(
                           textInputAction: TextInputAction.search,
+                          onSubmitted: onSummit,
                           autofocus: widget.autoFocus,
                           controller: _searchQueryController,
                           onChanged: _onTextChanged,
