@@ -133,6 +133,7 @@ class SearchBar<T> extends StatefulWidget {
   final Future<List<T>> Function(String text) onSearch;
   final void Function()? onSummit;
   final void Function()? onTap;
+  final FocusNode? focusNode;
 
   final TextEditingController? textEditingController;
   /// default false.
@@ -242,6 +243,7 @@ class SearchBar<T> extends StatefulWidget {
     this.onSummit,
     this.onTap,
     this.textEditingController,
+    this.focusNode,
     this.suggestions = const [],
     this.buildSuggestion,
     this.searchBarStyle = const SearchBarStyle(),
@@ -425,6 +427,7 @@ class SearchBarState<T> extends State<SearchBar<T>>
                           textInputAction: TextInputAction.search,
                           onEditingComplete: onSummit,
                           autofocus: widget.autoFocus,
+                          focusNode: widget.focusNode,
                           controller: _searchQueryController,
                           onChanged: _onTextChanged,
                           style: widget.textStyle,
