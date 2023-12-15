@@ -393,6 +393,7 @@ class SearchBarState<T> extends State<SearchBar<T>>
                           primaryColor: widget.iconActiveColor,
                         ),
                         child: TextField(
+                          textInputAction: TextInputAction.search,
                           autofocus: widget.autoFocus,
                           controller: _searchQueryController,
                           onChanged: _onTextChanged,
