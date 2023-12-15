@@ -1,7 +1,7 @@
 name: async_search_bar
 description:  A SearchBar widget automatizing most of your asynchronous searchs cases (based on flapy_search_bar).
 
-version: 2.0.0
+version: 2.0.1
 
 environment:
   sdk: '>=2.18.4 <3.0.0'
